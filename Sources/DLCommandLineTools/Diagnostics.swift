@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-import Basic
+import TSCBasic
 
 public struct RedundantDifferentiationFlagDiagnostic : DiagnosticData {
     public static var id = DiagnosticID(

@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.3
 //
 //  Package.swift
 //  DLVM
@@ -22,6 +22,7 @@ import PackageDescription
 
 let package = Package(
     name: "DLVM",
+    platforms: [.macOS(SupportedPlatform.MacOSVersion.v10_15)],
     products: [
         .library(name: "DLVM", type: .dynamic,
                  targets: ["DLVM", "DLParse"]),
@@ -36,14 +37,15 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-package-manager",
-                 .branch("swift-5.1-branch")),
-        .package(url: "https://github.com/dlvm-team/CoreTensor", from: "0.7.2")
+                 .branch("release/5.5")),
+        //.package(url: "https://github.com/dlvm-team/CoreTensor", from: "0.7.2"),
+        .package(name: "CoreTensor", path: "../CoreTensor")
     ],
     targets: [
         .target(name: "DLVM", dependencies: ["CoreTensor"]),
         .target(name: "DLParse", dependencies: ["DLVM"]),
         .target(name: "DLCommandLineTools", dependencies: [
-            "SPMUtility", "DLVM", "DLParse"
+            "DLVM", "DLParse"
         ]),
         .target(name: "dlopt", dependencies: [
             "DLVM", "DLParse", "DLCommandLineTools"
@@ -53,5 +55,5 @@ let package = Package(
             "DLVM", "DLParse"
         ]),
     ],
-    swiftLanguageVersions: [4]
+    swiftLanguageVersions: [.v4]
 )
