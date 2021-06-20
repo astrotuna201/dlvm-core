@@ -687,8 +687,8 @@ public extension Literal {
             return ops.flatMap(literalOperands(in:))
         case let .struct(fields):
             return fields.map{$1}.flatMap(literalOperands(in:))
-        case let .enumCase(values):
-            return values.1.flatMap(literalOperands(in:))
+        case let .enumCase(_, value1):
+            return value1.flatMap(literalOperands(in:))
         default:
             return []
         }

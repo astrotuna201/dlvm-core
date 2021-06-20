@@ -46,7 +46,7 @@ public extension OrderedSet {
 
     func index(of element: Element) -> Int? {
         guard contains(element) else { return nil }
-        return array.index(of: element)
+      return array.firstIndex(of: element)
     }
 
     @discardableResult

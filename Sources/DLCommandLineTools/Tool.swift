@@ -23,9 +23,54 @@
 @_exported import Darwin.C
 #endif
 
-import Basic
-import SPMUtility
+//import TSCBasic
+//import TSCUtility
+import ArgumentParser
+import struct TSCBasic.AbsolutePath
+
 import struct DLVM.OrderedSet
+struct DLCommandLineTool: ParsableCommand {
+  /// An enum indicating the execution status of run commands.
+  enum ExecutionStatus {
+      case success
+      case failure
+  }
+  
+  /// Input files
+  @Argument(help: "DLVM IR input files.")
+  public var inputFiles: [AbsolutePath] = []
+  /// Output paths
+  public var outputPaths: [AbsolutePath]?
+  /// Transformation passes
+  public var passes: OrderedSet<TransformPass>?
+  /// Print IR
+  public var shouldPrintIR = true
+
+  
+  /// The execution status of the tool.
+  //var executionStatus: ExecutionStatus = .success
+
+    @Flag(help: "Include a counter with each repetition.")
+    var includeCounter = false
+
+    @Option(name: .shortAndLong, help: "The number of times to repeat 'phrase'.")
+    var count: Int?
+
+    @Argument(help: "The phrase to repeat.")
+    var phrase: String
+
+    mutating func run() throws {
+        let repeatCount = count ?? .max
+
+        for i in 1...repeatCount {
+            if includeCounter {
+                print("\(i): \(phrase)")
+            } else {
+                print(phrase)
+            }
+        }
+    }
+}
 
 open class CommandLineTool<Options : ToolOptions> {
     /// An enum indicating the execution status of run commands.
@@ -38,7 +83,7 @@ open class CommandLineTool<Options : ToolOptions> {
     public let options: Options
 
     /// Reference to the argument parser.
-    public let parser: ArgumentParser
+  public let parser: ArgumentParser.ParsableArguments
 
     /// The execution status of the tool.
     var executionStatus: ExecutionStatus = .success
@@ -49,7 +94,7 @@ open class CommandLineTool<Options : ToolOptions> {
     public init(name: String, usage: String, overview: String,
                 arguments: [String], seeAlso: String? = nil) {
         // Create the parser.
-        parser = ArgumentParser(
+      parser = ArgumentParser(
             commandName: name,
             usage: usage,
             overview: overview,

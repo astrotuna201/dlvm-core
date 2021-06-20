@@ -55,7 +55,7 @@ extension BasicBlock : PremiseHolder {
         public typealias Result = Premise
 
         public static func run(on body: BasicBlock) throws -> Premise {
-            guard let index = body.index(where: { $0.kind.isTerminator }) else {
+          guard let index = body.firstIndex(where: { $0.kind.isTerminator }) else {
                 throw VerificationError.missingTerminator(body)
             }
             guard index == body.endIndex - 1 else {

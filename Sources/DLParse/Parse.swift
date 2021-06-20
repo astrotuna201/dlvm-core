@@ -423,7 +423,7 @@ extension Parser {
                         throw ParseError.invalidReductionCombinator(intrinsic, range)
                     }
                     return .numericBuiltin(numericBuiltin)
-                case .identifier(_):
+                case .identifier(_, _):
                     return try .function(parseUse(in: basicBlock).0)
                 case .opcode(.numericBinaryOp(let op)):
                     consumeToken()

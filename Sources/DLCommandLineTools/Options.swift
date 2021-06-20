@@ -17,7 +17,7 @@
 //  limitations under the License.
 //
 
-import struct Basic.AbsolutePath
+import struct TSCBasic.AbsolutePath
 import struct DLVM.OrderedSet
 
 open class ToolOptions {

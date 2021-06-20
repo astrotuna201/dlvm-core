@@ -266,7 +266,7 @@ fileprivate extension Differentiation {
                 keptIndices: [], isSeedable: true
             )
             if let funcAdjoints = adjoints[fn],
-                let gradIndex = funcAdjoints.index(where: { $0.config == config }) {
+               let gradIndex = funcAdjoints.firstIndex(where: { $0.config == config }) {
                 adjoint = funcAdjoints[gradIndex].adjoint
             } else {
                 guard let adjointType = fn.adjointType(from: nil,

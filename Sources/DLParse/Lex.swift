@@ -442,7 +442,7 @@ private extension Lexer {
     }
 
     func scanNumber(isNegative: Bool = false) throws -> Token {
-        let endOfWhole = characters.index(where: { !$0.isDigit }) ?? characters.endIndex
+      let endOfWhole = characters.firstIndex(where: { !$0.isDigit }) ?? characters.endIndex
         var number = characters.prefix(upTo: endOfWhole)
         let startLoc = location
         advance(by: number.count)

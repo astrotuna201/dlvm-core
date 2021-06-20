@@ -22,7 +22,7 @@ import PackageDescription
 
 let package = Package(
     name: "DLVM",
-    platforms: [.macOS(SupportedPlatform.MacOSVersion.v10_15)],
+    platforms: [.macOS(.v11)],
     products: [
         .library(name: "DLVM", type: .dynamic,
                  targets: ["DLVM", "DLParse"]),
@@ -36,8 +36,9 @@ let package = Package(
                     targets: ["dlopt"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-package-manager",
-                 .branch("release/5.5")),
+      .package(url: "https://github.com/apple/swift-argument-parser", .branch("main")),
+        //.package(url: "https://github.com/apple/swift-package-manager",
+        //         .branch("release/5.5")),
         //.package(url: "https://github.com/dlvm-team/CoreTensor", from: "0.7.2"),
         .package(name: "CoreTensor", path: "../CoreTensor")
     ],
@@ -45,7 +46,8 @@ let package = Package(
         .target(name: "DLVM", dependencies: ["CoreTensor"]),
         .target(name: "DLParse", dependencies: ["DLVM"]),
         .target(name: "DLCommandLineTools", dependencies: [
-            "DLVM", "DLParse"
+            "DLVM", "DLParse",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
         ]),
         .target(name: "dlopt", dependencies: [
             "DLVM", "DLParse", "DLCommandLineTools"
@@ -55,5 +57,5 @@ let package = Package(
             "DLVM", "DLParse"
         ]),
     ],
-    swiftLanguageVersions: [.v4]
+    swiftLanguageVersions: [.v5]
 )

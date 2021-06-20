@@ -78,7 +78,7 @@ public extension StructType {
     }
 
     func indexOfField(named name: String) -> Int? {
-        return fields.index(where: { $0.name == name })
+      return fields.firstIndex(where: { $0.name == name })
     }
 }
 

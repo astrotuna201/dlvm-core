@@ -64,7 +64,7 @@ extension IRBuilder {
     @discardableResult
     open func buildStruct(
         named name: String,
-        fields: DictionaryLiteral<String, Type>) -> StructType {
+        fields: KeyValuePairs<String, Type>) -> StructType {
         let structTy = StructType(name: name, fields: fields.map{$0})
         module.structs.append(structTy)
         return structTy
@@ -73,7 +73,7 @@ extension IRBuilder {
     @discardableResult
     open func buildEnum(
         named name: String,
-        cases: DictionaryLiteral<String, [Type]>) -> EnumType {
+        cases: KeyValuePairs<String, [Type]>) -> EnumType {
         let enumTy = EnumType(name: name, cases: cases.map{$0})
         module.enums.append(enumTy)
         return enumTy
@@ -113,7 +113,7 @@ extension IRBuilder {
 
     @discardableResult
     open func buildBasicBlock(named name: String?,
-                              arguments: DictionaryLiteral<String?, Type>,
+arguments: KeyValuePairs<String?, Type>,
                               in function: Function) -> BasicBlock {
         let block = BasicBlock(name: name,
                                arguments: arguments.map{($0.0, $0.1)},
