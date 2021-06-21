@@ -37,6 +37,7 @@ let package = Package(
     ],
     dependencies: [
       .package(url: "https://github.com/apple/swift-argument-parser", .branch("main")),
+      .package(url: "https://github.com/apple/swift-tools-support-core", .branch("main")),
         //.package(url: "https://github.com/apple/swift-package-manager",
         //         .branch("release/5.5")),
         //.package(url: "https://github.com/dlvm-team/CoreTensor", from: "0.7.2"),
@@ -47,7 +48,8 @@ let package = Package(
         .target(name: "DLParse", dependencies: ["DLVM"]),
         .target(name: "DLCommandLineTools", dependencies: [
             "DLVM", "DLParse",
-            .product(name: "ArgumentParser", package: "swift-argument-parser")
+            .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            .product(name: "SwiftToolsSupport", package: "swift-tools-support-core")
         ]),
         .target(name: "dlopt", dependencies: [
             "DLVM", "DLParse", "DLCommandLineTools"

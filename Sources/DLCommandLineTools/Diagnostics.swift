@@ -18,6 +18,7 @@
 //
 
 //import TSCUtility
+import TSCUtility
 
 public struct RedundantDifferentiationFlagDiagnostic : DiagnosticData {
     public static var id = DiagnosticID(
