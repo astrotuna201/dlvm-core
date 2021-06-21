@@ -20,8 +20,9 @@
 import DLVM
 import protocol TSCUtility.StringEnumArgument
 import enum TSCUtility.ShellCompletion
+import ArgumentParser
 
-public enum TransformPass: String {
+public enum TransformPass: String, CaseIterable, ExpressibleByArgument, EnumerableFlag {
     case algebraSimplification = "AlgebraSimplification"
     case cfgCanonicalization = "CFGCanonicalization"
     case cfgSimplification = "CFGSimpliciation"
@@ -34,6 +35,7 @@ public enum TransformPass: String {
     case stackPromotion = "StackPromotion"
     case valuePromotion = "ValuePromotion"
 }
+
 
 public extension TransformPass {
     var abbreviation: String {
@@ -114,8 +116,17 @@ public extension TransformPass {
     }
 }
 
-extension TransformPass : StringEnumArgument {
-    public static var completion: ShellCompletion {
+extension TransformPass {
+  public static func name(for value: Self) -> NameSpecification {
+    switch value {
+      default:
+        return [.customLong(value.abbreviation), .long]
+    }
+  }
+  public static func listPasses(_ arguments: [String]) -> [String] {
+    TransformPass.allCases.map{"\($0.abbreviation): \($0.description)" }
+  }
+    /*public static var completion: ShellCompletion {
         // NOTE: Can be shortened with enum iteration
         return .values([
             (algebraSimplification.abbreviation,
@@ -141,7 +152,7 @@ extension TransformPass : StringEnumArgument {
             (valuePromotion.abbreviation,
              valuePromotion.description)
         ])
-    }
+    }*/
 }
 
 public func runPass(_ pass: TransformPass, on module: Module,

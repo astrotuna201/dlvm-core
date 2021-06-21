@@ -17,10 +17,13 @@
 //  limitations under the License.
 //
 
-//import TSCUtility
+import TSCBasic
 import TSCUtility
 
+/*
 public struct RedundantDifferentiationFlagDiagnostic : DiagnosticData {
+  public var description: String = "'AD' flag is redundant, differentiation pass is mandatory"
+  
     public static var id = DiagnosticID(
         type: RedundantDifferentiationFlagDiagnostic.self,
         name: "org.dlvm.diags.redundant-ad-flag",
@@ -30,3 +33,4 @@ public struct RedundantDifferentiationFlagDiagnostic : DiagnosticData {
         }
     )
 }
+*/

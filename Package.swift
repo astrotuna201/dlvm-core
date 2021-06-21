@@ -41,18 +41,20 @@ let package = Package(
         //.package(url: "https://github.com/apple/swift-package-manager",
         //         .branch("release/5.5")),
         //.package(url: "https://github.com/dlvm-team/CoreTensor", from: "0.7.2"),
-        .package(name: "CoreTensor", path: "../CoreTensor")
+      .package(name: "CoreTensor", path: "../CoreTensor"),
+      .package(url: "https://github.com/onevcat/Rainbow.git", .upToNextMajor(from: "4.0.0")),
     ],
     targets: [
         .target(name: "DLVM", dependencies: ["CoreTensor"]),
         .target(name: "DLParse", dependencies: ["DLVM"]),
         .target(name: "DLCommandLineTools", dependencies: [
-            "DLVM", "DLParse",
+            "Rainbow", "DLVM", "DLParse",
             .product(name: "ArgumentParser", package: "swift-argument-parser"),
             .product(name: "SwiftToolsSupport", package: "swift-tools-support-core")
         ]),
         .target(name: "dlopt", dependencies: [
-            "DLVM", "DLParse", "DLCommandLineTools"
+          .product(name: "ArgumentParser", package: "swift-argument-parser"),
+          "Rainbow", "DLVM", "DLParse", "DLCommandLineTools"
         ]),
         .testTarget(name: "DLVMTests", dependencies: ["DLVM"]),
         .testTarget(name: "DLParseTests", dependencies: [

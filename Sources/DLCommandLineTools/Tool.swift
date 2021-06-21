@@ -27,51 +27,79 @@
 //import TSCUtility
 import ArgumentParser
 import struct TSCBasic.AbsolutePath
+import Rainbow
 
-import struct DLVM.OrderedSet
-struct DLCommandLineTool: ParsableCommand {
+
+extension AbsolutePath: ExpressibleByArgument {
+  public init?(argument: String) {
+    self.init(argument)
+  }
+}
+
+/*extension OrderedSet: ExpressibleByArgument where Element == TransformPass {
+  public init?(argument: String) {
+    if let pass = TransformPass(rawValue: argument) {
+      self.append(pass)
+    } else {
+      return nil
+    }
+  }
+}*/
+
+//import struct DLVM.OrderedSet
+public struct ToolOptions: ParsableArguments {
   /// An enum indicating the execution status of run commands.
-  enum ExecutionStatus {
+  public init() {}
+  public enum ExecutionStatus: Codable {
       case success
       case failure
   }
-  
+  /*
+  static let configuration =
+    CommandConfiguration(
+      commandName: "DLCommandLineTools",
+      abstract:
+"""
+A command-line tool to interpolate numerical data from text at fixed intervals.
+""".bold,
+      discussion:
+"""
+This tool ...
+
+There are various options to:
+- abc
+- abc
+- abc
+- abc
+- abc
+- abc
+""",
+      version: "0.1.0",
+      shouldDisplay: false,
+      subcommands: [ParsableCommand.Type](),
+      defaultSubcommand: nil,
+      helpNames: nil)
+  */
+  //var executionStatus: ExecutionStatus = .success
   /// Input files
-  @Argument(help: "DLVM IR input files.")
+  @Argument(help: "DLVM IR input file paths.", completion: .file())
   public var inputFiles: [AbsolutePath] = []
   /// Output paths
-  public var outputPaths: [AbsolutePath]?
-  /// Transformation passes
-  public var passes: OrderedSet<TransformPass>?
-  /// Print IR
-  public var shouldPrintIR = true
-
+  @Option(name: [.short], parsing: .upToNextOption, help: "DLVM IR output file paths.", completion: .file())
+  public var outputPaths: [AbsolutePath] = []
   
-  /// The execution status of the tool.
-  //var executionStatus: ExecutionStatus = .success
+  @Flag
+  public var passes: [TransformPass] = []
+  
+  @Flag(name: [.customLong("print-ir")], help:"""
+                                   Print IR after transformations instead of \
+                                   writing to files
+                                   """)
+  public var shouldPrintIR = false
 
-    @Flag(help: "Include a counter with each repetition.")
-    var includeCounter = false
 
-    @Option(name: .shortAndLong, help: "The number of times to repeat 'phrase'.")
-    var count: Int?
 
-    @Argument(help: "The phrase to repeat.")
-    var phrase: String
-
-    mutating func run() throws {
-        let repeatCount = count ?? .max
-
-        for i in 1...repeatCount {
-            if includeCounter {
-                print("\(i): \(phrase)")
-            } else {
-                print(phrase)
-            }
-        }
-    }
-}
-
+/*
 open class CommandLineTool<Options : ToolOptions> {
     /// An enum indicating the execution status of run commands.
     enum ExecutionStatus {
@@ -155,41 +183,14 @@ open class CommandLineTool<Options : ToolOptions> {
         }
     }
 
-    open class func setUp(parser: ArgumentParser,
-                          binder: ArgumentBinder<Options>) {
-        fatalError("Must be implemented by subclasses")
-    }
 
-    /// Run method implementation to be overridden by subclasses.
-    open func run() throws {
-        fatalError("Must be implemented by subclasses")
-    }
+*/
+  public static func setUp(parser: Any, //ArgumentParser,
+                           binder: Any) {//ArgumentBinder<Options>) {
+      fatalError("Must be implemented by subclasses")
+  }
 
-    /// Exit the tool with the given execution status.
-    static func exit(with status: ExecutionStatus) -> Never {
-        switch status {
-            #if os(Linux)
-        case .success: Glibc.exit(EXIT_SUCCESS)
-        case .failure: Glibc.exit(EXIT_FAILURE)
-            #else
-        case .success: Darwin.exit(EXIT_SUCCESS)
-        case .failure: Darwin.exit(EXIT_FAILURE)
-            #endif
-        }
-    }
+
 }
 
-public extension CommandLineTool {
-    /// Execute the tool.
-    final func runAndDiagnose() {
-        do {
-            // Call the implementation.
-            try run()
-        } catch {
-            // Set execution status to failure in case of errors.
-            executionStatus = .failure
-            handleError(error)
-        }
-        CommandLineTool.exit(with: executionStatus)
-    }
-}
+

@@ -20,6 +20,7 @@
 import Foundation
 import ArgumentParser
 import TSCBasic
+import TSCUtility
 //import TSCBasic
 //import TSCUtility
 
@@ -60,7 +61,9 @@ public func printError(_ error: Any) {
 func printDiagnostic(_ diagnostic: Diagnostic) {
     let writer = InteractiveWriter.stderr
     if !(diagnostic.location is UnknownLocation) {
-        writer.write(diagnostic.location.localizedDescription)
+        //writer.write(diagnostic.location.localizedDescription)
+      writer.write(diagnostic.location.description)
+
         writer.write(": ")
     }
     switch diagnostic.behavior {
@@ -70,8 +73,11 @@ func printDiagnostic(_ diagnostic: Diagnostic) {
         writer.write("warning: ", in: .yellow, bold: true)
     case .note:
         writer.write("note: ", in: .white, bold: true)
-    case .ignored:
+      case .remark:
+        writer.write("remark: ", in: .white, bold: true)
+      case .ignored:
         return
+
     }
     writer.write(diagnostic.localizedDescription)
     writer.write("\n")
@@ -79,20 +85,20 @@ func printDiagnostic(_ diagnostic: Diagnostic) {
 
 func printDiagnostic(_ data: DiagnosticData) {
     printDiagnostic(Diagnostic(
-        location: UnknownLocation.location,
-        data: data
+      message: Diagnostic.Message.note(data),
+      location: UnknownLocation.location
     ))
 }
 
-internal func handleError(_ error: Any) {
-    switch error {
-    case ArgumentParserError.expectedArguments(let parser, _):
-        printError(error)
-        parser.printUsage(on: stderrStream)
-    default:
-        printError(error)
-    }
-}
+//internal func handleError(_ error: Any) {
+//    switch error {
+//    case ArgumentParserError.expectedArguments(let parser, _):
+//        printError(error)
+//        parser.printUsage(on: stderrStream)
+//    default:
+//        printError(error)
+//    }
+//}
 
 /// This class is used to write on the underlying stream.
 ///
